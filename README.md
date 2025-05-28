@@ -10,7 +10,7 @@
 
 ```bash
 git clone https://github.com/TzuChaoHuang/Backend.git
-cd Backend
+cd Backend/Backend
 git dotnet restore
 git dotnet run
 ```
