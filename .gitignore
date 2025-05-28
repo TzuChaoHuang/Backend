@@ -459,3 +459,7 @@ docker-compose*.yml
 
 # Azure Functions
 local.settings.json
+
+# IDE
+*.vscode/
+*.vscode/*

@@ -1,14 +1,19 @@
 using Swashbuckle.AspNetCore.Annotations;
+using Backend.Data;
+using Dapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 
-// Add OpenAPI/Swagger services
-builder.Services.AddOpenApi();
+// Configure Database Connection
+builder.Services.AddScoped<DbConnection>(_ => new DbConnection(
+    builder.Configuration.GetConnectionString("DefaultConnection")
+));
 
-// Add Swagger services (for UI)
+// Add OpenAPI/Swagger services
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -18,9 +23,7 @@ builder.Services.AddSwaggerGen(c =>
         Description = "A simple file upload API with support for images and videos"
     });
     
-    // Support for file uploads
     c.EnableAnnotations();
-    c.SupportNonNullableReferenceTypes();
 });
 
 var app = builder.Build();
@@ -28,16 +31,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    // Enable OpenAPI endpoint
-    app.MapOpenApi();
-    
-    // Enable Swagger UI
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-        c.RoutePrefix = string.Empty; // This makes Swagger UI available at root URL
-    });
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
