@@ -4,8 +4,23 @@ using Dapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Set the listening URLs
+builder.WebHost.UseUrls("https://localhost:7181");
+
 // Add services to the container.
 builder.Services.AddControllers();
+
+// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowViteFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") // Vite frontend origin
+              .AllowAnyMethod() // Allow GET, POST, etc.
+              .AllowAnyHeader() // Allow any headers
+              .AllowCredentials(); // Allow cookies or auth headers if needed
+    });
+});
 
 // Configure Database Connection
 builder.Services.AddScoped<DbConnection>(_ => new DbConnection(
@@ -36,6 +51,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowViteFrontend"); // Apply CORS policy
 app.UseAuthorization();
 app.MapControllers();
 
