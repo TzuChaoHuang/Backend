@@ -76,7 +76,7 @@ public class FileController : ControllerBase
                 uploadedFiles.Add(uniqueFileName);
             }
 
-            return Ok(new Response(true, $"Files uploaded successfully. File names: {string.Join(", ", uploadedFiles)}"));
+            return Ok(new Response(true, $"Files uploaded successfully. File names: {string.Join(", ", uploadedFiles)}",uploadedFiles));
         }
         catch (Exception ex)
         {
