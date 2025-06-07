@@ -24,9 +24,9 @@ namespace Backend.Models
     {
         public bool IsPassword { get; set; }
         public string? Password { get; set; }
-        public string? Description { get; set; }
+        public string Description { get; set; } = "";
         public int ExpiredDays { get; set; }
-        public List<string> FileNames { get; set; }
+        public List<string> FileNames { get; set; } = new List<string>();
     }
 
     public class ValidatePasswordRequest
